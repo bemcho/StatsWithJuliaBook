@@ -1,13 +1,13 @@
-using PyPlot, PyCall 
+using PyPlot, PyCall
 @pyimport matplotlib.image as image
 @pyimport matplotlib.patches as patch
 
-img = image.imread("stars.png") 
+img = image.imread("stars.png")
 gImg = img[:,:,1]*0.299 +img[:,:,2]*0.587 + img[:,:,3]*0.114
 rows, cols = size(gImg)
 
 function boxBlur(image,x,y,d)
-    if x<=d || y<=d || x>=cols-d || y>=rows-d
+    if x<=d || y<=d || x>=rows-d || y>=cols-d
         return image[x,y]
     else
         total = 0.0
@@ -19,10 +19,10 @@ function boxBlur(image,x,y,d)
         return total/((2d+1)^2)
     end
 end
-    
-blurImg = [boxBlur(gImg,x,y,3) for x in 1:cols, y in 1:rows]
 
-yOriginal, xOriginal = argmax(gImg).I 
+blurImg = [boxBlur(gImg,x,y,3) for x in 1:rows, y in 1:cols]
+
+yOriginal, xOriginal = argmax(gImg).I
 yBoxBlur, xBoxBlur   = argmax(blurImg).I
 
 fig = figure(figsize=(10,5))

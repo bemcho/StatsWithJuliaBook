@@ -5,7 +5,7 @@ The smoothed scatterPlot is the desired visual display for revealing a rough-fre
     Smoothing is a method of removing the rough and retaining the predictable underlying relationship (the smooth) in data by averaging within neighborhoods of similar values.
     Smoothing an X–Y scatterplot involves taking the averages of both the target (dependent) variable Y and the continuous predictor (independent) variable X, within X-based neighborhoods
 """
-function smooth(vals::Array{Float64})
+function smooth(vals::Array{T,N}) where {T<:Number,N}
 
     result = Float64[]
     sliceSize = Int(length(vals) / 10)
@@ -38,9 +38,19 @@ Notation for smooth Y is sm_Y.
 Plot the smooth points (smooth Y, smooth X), constructing a smooth scatterplot.
 Connect the smooth points, starting from the first left smooth point through the last right smooth point. The resultant smooth trace line reveals the underlying relationship between X and Y.
 """
-function smoothScatterPlot(xVals,yVals)
+function smoothScatterPlot!(xVals,yVals)
     xSmooth = smooth(xVals)
     ySmooth = smooth(yVals)
     plot!(xSmooth,ySmooth,label="Smooth Trace Line N=$(length(xSmooth))",color=[:red])
-    hline!([median(ySmooth)],label="Median line,N=10 -> CI 95% is 2 intersec.,CI 99% is 1 intersec.",color=[:green])
+    hline!([median(ySmooth)],label="Median line,N=10 -> CI 95% when 2 intersec.,CI 99% when 1 intersec.",color=[:green])
+end
+
+
+function smoothScatterPlot(xVals,yVals)
+    xSmooth = smooth(xVals)
+    ySmooth = smooth(yVals)
+    plt =  scatter(xVals,yVals,title="Smooth Scatter plot",label="Raw x,y Correlation coeff. = $(cor(xVals,yVals))")
+    plot!(xSmooth,ySmooth,label="Smooth Trace Line N=$(length(xSmooth))",color=[:red])
+    hline!([median(ySmooth)],label="Median line,N=10 -> CI 95% when 2 intersec.,CI 99% when 1 intersec.",color=[:green])
+    return plt
 end

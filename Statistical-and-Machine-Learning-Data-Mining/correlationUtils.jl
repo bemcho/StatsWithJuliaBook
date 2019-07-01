@@ -1,10 +1,10 @@
 using GeometryTypes
 """
-    smooth(vals)
+    smooth(vals::Array{T,N}) where {T<:Real,N}
 
-The smoothed scatterPlot is the desired visual display for revealing a rough-free relationship lying within big data.
-    Smoothing is a method of removing the rough and retaining the predictable underlying relationship (the smooth) in data by averaging within neighborhoods of similar values.
-    Smoothing an X–Y scatterplot involves taking the averages of both the target (dependent) variable Y and the continuous predictor (independent) variable X, within X-based neighborhoods
+For a continuous X variable, divide the X-axis into distinct and nonoverlapping neighborhoods (slices). A common approach to dividing the X-axis is creating 10 equal-sized slices (also known as deciles), whose aggregation equals the total sample [3–5]. Each slice accounts for 10% of the sample. For a categorical X variable, slicing per se cannot be performed. The categorical labels (levels) define single-point slices. Each single-point slice accounts for a percentage of the sample dependent on the distribution of the categorical levels in the sample.
+
+Take the average of X within each slice. The average is either the mean or median. The average of X within each slice is known as a smooth X value, or smooth X.Notation for smooth X is sm_X.
 """
 function smooth(vals::Array{T,N}) where {T<:Real,N}
 
@@ -22,7 +22,7 @@ function smooth(vals::Array{T,N}) where {T<:Real,N}
 end # function
 
 """
-    smoothScatterPlot(xVals,yVals)
+   smoothScatterPlot!(xVals::Array{T,N},yVals::Array{T,N}) where {T<:Real,N}
 
 The smoothed scatterplot is the desired visual display for revealing a rough-free relationship lying within big data. Smoothing is a method of removing the rough and retaining the predictable underlying relationship (the smooth) in data by averaging within neighborhoods of similar values. Smoothing an X–Y scatterplot involves taking the averages of both the target (dependent) variable Y and the continuous predictor (independent) variable X, within X-based neighborhoods [2]. The six-step procedure to construct a smoothed scatterplot follows:
 
@@ -39,7 +39,7 @@ Notation for smooth Y is sm_Y.
 Plot the smooth points (smooth Y, smooth X), constructing a smooth scatterplot.
 Connect the smooth points, starting from the first left smooth point through the last right smooth point. The resultant smooth trace line reveals the underlying relationship between X and Y.
 """
-function smoothScatterPlot!(xVals,yVals)
+function smoothScatterPlot!(xVals::Array{T,N},yVals::Array{T,N}) where {T<:Real,N}
     xSmooth = smooth(xVals)
     ySmooth = smooth(yVals)
     plot!(xSmooth,ySmooth,label="Smooth Trace Line N=$(length(xSmooth))",color=[:red])
@@ -47,7 +47,7 @@ function smoothScatterPlot!(xVals,yVals)
 end
 
 
-function smoothScatterPlot(xVals,yVals)
+function smoothScatterPlot(xVals::Array{T,N},yVals::Array{T,N}) where {T<:Real,N}
     xSmooth = smooth(xVals)
     ySmooth = smooth(yVals)
     plt =  scatter(xSmooth,ySmooth,title="Smooth Scatter plot",label="Raw x,y Correlation coeff. = $(cor(xVals,yVals))")
@@ -56,10 +56,14 @@ function smoothScatterPlot(xVals,yVals)
 end
 
 """
-    Validate GAT calculating TS score
+validateGAT(xVals::Array{T,N},yVals::Array{T,N}) where {T<: Real,N}
+
+    Validates GAT calculating TS score
+
 TS is N − 1 − m.
-where N is lenght in xVals or yVals
-m is intersections count with median line
+where N is length in xVals or yVals
+m is number of  intersections with median line
+Detects intersections with median line and returns (N,TS,intersections as LineSegments)
 """
 function validateGAT(xVals::Array{T,N},yVals::Array{T,N}) where {T<: Real,N}
 
@@ -74,16 +78,37 @@ function validateGAT(xVals::Array{T,N},yVals::Array{T,N}) where {T<: Real,N}
 
 end
 
-function generalAssesmentTest(xVals,yVals,title,xLabel,yLabel)
+"""
+   generalAssociationTest(xVals::Array{T,N},yVals::Array{T,N},title::String,xLabel::String,yLabel::String) where {T<:Real,N}
+
+Here is the general association test:
+
+    Plots the N smooth points in a scatterplot and draw a horizontal medial line that divides the N points into two equal-sized groups.
+
+    Connect the N smooth points starting from the first left-hand smooth point. N − 1 line segments result. Count the number m of line segments that cross the medial line.
+
+    Test for significance. The null hypothesis: There is no association between the two variables at hand. The alternative hypothesis: There is an association between the two variables.
+
+```Consider the test statistic TS is N − 1 − m.
+
+ N                                      CI 95%,TS                         CI 99%,TS
+-------------------------------------------------------------------------------------------
+8-9                                           6                                  -
+10-11                                         7                                  8
+12-13                                         9                                  10 
+14-15                                         10                                 11
+```
+"""
+function generalAssociationTest(xVals::Array{T,N},yVals::Array{T,N},title::String,xLabel::String,yLabel::String) where {T<:Real,N}
 
     t = "General Assesment Test, $title, Correlation coeff. = $(cor(xVals,yVals))"
     plt =  scatter(xVals,yVals,title=t,xlabel=xLabel,ylabel=yLabel,m=(0.5,[:+]),bg=:linen)
     smoothScatterPlot!(xVals,yVals)
 
-    N,TS,intersections = validateGAT(xVals,yVals)
-    annotate!([(median(xVals) ,maximum(yVals),"N is $N ,TS is $TS, Intersections - $(length(intersections)), $(TS < 7 ? :failed : :passed)")])
+    n,TS,intersections = validateGAT(xVals,yVals)
+    annotate!([(median(xVals) ,maximum(yVals),"N is $n ,TS is $TS, Intersections - $(length(intersections)), $(TS < 7 ? :failed : :passed)")])
   
-    println("N is $N, TS is $TS, Intersections - $(length(intersections)), $(TS < 7 ? :failed : :passed))")
+    println("N is $n, TS is $TS, Intersections - $(length(intersections)), $(TS < 7 ? :failed : :passed))")
     return plt
 
 end

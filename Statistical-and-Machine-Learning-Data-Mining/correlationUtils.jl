@@ -54,3 +54,12 @@ function smoothScatterPlot(xVals,yVals)
     hline!([median(ySmooth)],label="Median line,N=10 -> CI 95% when 2 intersec.,CI 99% when 1 intersec.",color=[:green])
     return plt
 end
+
+function generalAssesmentTest(xVals,yVals,title,xLabel,yLabel)
+
+    t = "General Assesment Test, $title, Correlation coeff. = $(cor(xVals,yVals))"
+    plt =  scatter(xVals,yVals,title=t,xlabel=xLabel,ylabel=yLabel,m=(0.5,[:+ :h :star7],12),bg=RGB(0.2,0.2,0.2))
+    smoothScatterPlot!(xVals,yVals)
+    return plt
+
+end

@@ -77,7 +77,7 @@ end
 function generalAssesmentTest(xVals,yVals,title,xLabel,yLabel)
 
     t = "General Assesment Test, $title, Correlation coeff. = $(cor(xVals,yVals))"
-    plt =  scatter(xVals,yVals,title=t,xlabel=xLabel,ylabel=yLabel,m=(0.5,[:+ :h :star7],12),bg=RGB(0.2,0.2,0.2))
+    plt =  scatter(xVals,yVals,title=t,xlabel=xLabel,ylabel=yLabel,m=(0.5,[:+]),bg=:linen)
     smoothScatterPlot!(xVals,yVals)
 
     N,TS,intersections = validateGAT(xVals,yVals)

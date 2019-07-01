@@ -1,3 +1,4 @@
+using GeometryTypes
 """
     smooth(vals)
 
@@ -5,7 +6,7 @@ The smoothed scatterPlot is the desired visual display for revealing a rough-fre
     Smoothing is a method of removing the rough and retaining the predictable underlying relationship (the smooth) in data by averaging within neighborhoods of similar values.
     Smoothing an X–Y scatterplot involves taking the averages of both the target (dependent) variable Y and the continuous predictor (independent) variable X, within X-based neighborhoods
 """
-function smooth(vals::Array{T,N}) where {T<:Number,N}
+function smooth(vals::Array{T,N}) where {T<:Real,N}
 
     result = Float64[]
     sliceSize = Int(length(vals) / 10)
@@ -54,11 +55,37 @@ function smoothScatterPlot(xVals,yVals)
     return plt
 end
 
+"""
+    Validate GAT calculating TS score
+TS is N − 1 − m.
+where N is lenght in xVals or yVals
+m is intersections count with median line
+"""
+function validateGAT(xVals::Array{T,N},yVals::Array{T,N}) where {T<: Real,N}
+
+    xSmooth = smooth(xVals)
+    ySmooth = smooth(yVals)
+    medianY = median(ySmooth)
+    medianLine = LineSegment(Point(minimum(xSmooth),medianY),Point(maximum(xSmooth),medianY))
+
+    n = length(xSmooth)
+    intersections = [l1 for l1 in [LineSegment(Point(xSmooth[i1],ySmooth[i1]),Point(xSmooth[i1+1],ySmooth[i1+1])) for i1=1:n-1] if first(GeometryTypes.intersects(l1,medianLine))]
+    return (n, n-1-length(intersections),intersections)
+
+end
+
 function generalAssesmentTest(xVals,yVals,title,xLabel,yLabel)
 
     t = "General Assesment Test, $title, Correlation coeff. = $(cor(xVals,yVals))"
     plt =  scatter(xVals,yVals,title=t,xlabel=xLabel,ylabel=yLabel,m=(0.5,[:+ :h :star7],12),bg=RGB(0.2,0.2,0.2))
     smoothScatterPlot!(xVals,yVals)
+
+    N,TS,intersections = validateGAT(xVals,yVals)
+    annotate!([(median(xVals) ,maximum(yVals),"N is $N ,TS is $TS, Intersections - $(length(intersections)), $(TS < 7 ? :failed : :passed)")])
+  
+    println("N is $N, TS is $TS, Intersections - $(length(intersections)), $(TS < 7 ? :failed : :passed))")
     return plt
 
 end
+
+

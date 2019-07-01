@@ -1,5 +1,5 @@
 cd(dirname(@__FILE__()))
-using Plots,StatsPlots,Statistics,DataFrames,RDatasets
+using DataFrames,RDatasets
 include("correlationUtils.jl")
 gr()
 
@@ -16,7 +16,7 @@ println("Correlation coeff. = $(cor(xVals,yVals))")
 plt1 = generalAssociationTest(xVals,yVals, "Iris dataset","SepalLength","SepalWidth")
 
 #smoothScatterPlot!(xVals,yVals)
-savefig(plt1,"plotting/GAT_iris.png")
+Plots.savefig(plt1,"plotting/GAT_iris.png")
 
 solder = dataset("rpart","solder")
 println(first(solder))
@@ -25,12 +25,12 @@ println(describe(solder))
 xVals = solder[5]
 yVals = solder[6]
 plt2 = generalAssociationTest(xVals,yVals, "Solder dataset","Panel","Skips")
-savefig(plt2,"plotting/GAT_solder.png")
+Plots.savefig(plt2,"plotting/GAT_solder.png")
 
 xVals = rand(1:10000,10000)
 yVals = rand(1:10000,10000)
 plt2 = generalAssociationTest(xVals,yVals, "Random","Rand x","Rand y")
-savefig(plt2,"plotting/GAT_random.png")
+Plots.savefig(plt2,"plotting/GAT_random.png")
 
 
 

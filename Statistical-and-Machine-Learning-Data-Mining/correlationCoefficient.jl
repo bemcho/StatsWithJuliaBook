@@ -31,3 +31,5 @@ xVals = rand(10000)
 yVals = rand(10000)
 plt2 = generalAssesmentTest(xVals,yVals, "Random","Rand x","Rand y")
 savefig(plt2,"plotting/GAT_random.png")
+
+smoothScatterPlot(xVals,yVals)

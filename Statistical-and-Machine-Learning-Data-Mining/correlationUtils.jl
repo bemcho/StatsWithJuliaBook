@@ -42,16 +42,15 @@ function smoothScatterPlot!(xVals,yVals)
     xSmooth = smooth(xVals)
     ySmooth = smooth(yVals)
     plot!(xSmooth,ySmooth,label="Smooth Trace Line N=$(length(xSmooth))",color=[:red])
-    hline!([median(ySmooth)],label="Median line,N=10 -> CI 95% when 2 intersec.,CI 99% when 1 intersec.",color=[:green])
+    hline!([median(ySmooth)],label="Median line,N=10 -> CI 95% when 2 intersec.,CI 99% when 1 intersec,CI 0% when more than 2 intersec",color=[:green])
 end
 
 
 function smoothScatterPlot(xVals,yVals)
     xSmooth = smooth(xVals)
     ySmooth = smooth(yVals)
-    plt =  scatter(xVals,yVals,title="Smooth Scatter plot",label="Raw x,y Correlation coeff. = $(cor(xVals,yVals))")
-    plot!(xSmooth,ySmooth,label="Smooth Trace Line N=$(length(xSmooth))",color=[:red])
-    hline!([median(ySmooth)],label="Median line,N=10 -> CI 95% when 2 intersec.,CI 99% when 1 intersec.",color=[:green])
+    plt =  scatter(xSmooth,ySmooth,title="Smooth Scatter plot",label="Raw x,y Correlation coeff. = $(cor(xVals,yVals))")
+    smoothScatterPlot!(xVals,yVals)
     return plt
 end
 

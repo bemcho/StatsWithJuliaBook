@@ -29,7 +29,7 @@ Plots.savefig(plt2,"plotting/GAT_solder.png")
 
 xVals = rand(1:10000,10000)
 yVals = rand(1:10000,10000)
-plt2 = generalAssociationTest(xVals,yVals, "Random","Rand x","Rand y")
+plt2 = generalAssociationTest(xVals,yVals, "Random","Rand X","Rand Y")
 Plots.savefig(plt2,"plotting/GAT_random.png")
 
 

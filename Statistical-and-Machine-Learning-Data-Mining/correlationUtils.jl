@@ -43,7 +43,7 @@ function smoothScatterPlot!(xVals::Array{T,N},yVals::Array{T,N}) where {T<:Real,
     xSmooth = smooth(xVals)
     ySmooth = smooth(yVals)
     plot!(xSmooth,ySmooth,label="Smooth Trace Line N=$(length(xSmooth))",color=[:red])
-    hline!([median(ySmooth)],label="Median line,N=10 -> CI 95% when 2 intersec.,CI 99% when 1 intersec,CI 0% when more than 2 intersec",color=[:green])
+    hline!([median(ySmooth)],label="Median line (median(ySmooth))",color=[:green])
 end
 
 
@@ -102,7 +102,7 @@ Here is the general association test:
 function generalAssociationTest(xVals::Array{T,N},yVals::Array{T,N},title::String,xLabel::String,yLabel::String) where {T<:Real,N}
 
     t = "General Assesment Test, $title, Correlation coeff. = $(cor(xVals,yVals))"
-    plt = Plots.scatter(xVals,yVals,title=t,xlabel=xLabel,ylabel=yLabel,m=(0.5,[:+]),bg=:linen)
+    plt = Plots.scatter(xVals,yVals,label="$xLabel , $yLabel (before smoothing)",title=t,xlabel=xLabel,ylabel=yLabel,m=(0.5,[:+]),bg=:linen)
     smoothScatterPlot!(xVals,yVals)
 
     n,TS,intersections = validateGAT(xVals,yVals)

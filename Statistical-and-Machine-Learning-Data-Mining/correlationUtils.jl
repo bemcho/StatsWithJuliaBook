@@ -14,7 +14,7 @@ function smooth(vals::Array{T,N}) where {T<:Real,N}
     rStart = 1
     for rEnd in rEnds
        #println(range(rStart,stop=rEnd))
-       push!(result,mean(vals[range(rStart,stop=rEnd)]))
+       push!(result,median(vals[range(rStart,stop=rEnd)]))
        rStart+=sliceSize
     end
 
@@ -43,7 +43,7 @@ function smoothScatterPlot!(xVals::Array{T,N},yVals::Array{T,N}) where {T<:Real,
     xSmooth = smooth(xVals)
     ySmooth = smooth(yVals)
     plot!(xSmooth,ySmooth,label="Smooth Trace Line N=$(length(xSmooth))",color=[:red])
-    hline!([mean(ySmooth)],label="Median line (mean(ySmooth))",color=[:green])
+    hline!([median(ySmooth)],label="Median line (median(ySmooth))",color=[:green])
 end
 
 
@@ -69,7 +69,7 @@ function validateGAT(xVals::Array{T,N},yVals::Array{T,N}) where {T<: Real,N}
 
     xSmooth = smooth(xVals)
     ySmooth = smooth(yVals)
-    medianY = mean(ySmooth)
+    medianY = median(ySmooth)
     medianLine = LineSegment(Point(minimum(xSmooth),medianY),Point(maximum(xSmooth),medianY))
 
     n = length(xSmooth)

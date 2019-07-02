@@ -109,7 +109,7 @@ function generalAssociationTest(xVals::Array{T,N},yVals::Array{T,N},title::Strin
     annotate!([(median(xVals) ,maximum(yVals),"N is $n ,TS is $TS, Intersections - $(length(intersections)), $(TS < 7 ? :failed : :passed)")])
   
     println("N is $n, TS is $TS, Intersections - $(length(intersections)), $(TS < 7 ? :failed : :passed))")
-    return plt
+    return (plt,n,TS,intersections)
 
 end
 

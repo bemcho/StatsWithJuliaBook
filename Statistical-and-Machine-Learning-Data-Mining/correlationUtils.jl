@@ -9,7 +9,7 @@ Take the average of X within each slice. The average is either the mean or media
 function smooth(vals::Array{T,N}) where {T<:Real,N}
 
     result = Float64[]
-    sliceSize = Int(length(vals) / 10)
+    sliceSize = Int(floor(length(vals) / 10))
     rEnds = [slice*sliceSize for slice=1:10]
     rStart = 1
     for rEnd in rEnds

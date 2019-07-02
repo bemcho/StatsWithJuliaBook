@@ -4,17 +4,13 @@ include("correlationUtils.jl")
 gr()
 
 iris = dataset("datasets","iris")
-
 println(first(iris))
 println(describe(iris))
 
 xVals = iris[:SepalLength]
 yVals = iris[:SepalWidth]
 
-println("Correlation coeff. = $(cor(xVals,yVals))")
-
 plt1,_ = generalAssociationTest(xVals,yVals, "Iris dataset","SepalLength","SepalWidth")
-
 #smoothScatterPlot!(xVals,yVals)
 Plots.savefig(plt1,"plotting/GAT_iris.png")
 
@@ -29,8 +25,17 @@ Plots.savefig(plt2,"plotting/GAT_solder.png")
 
 xVals = rand(1:10000,10000)
 yVals = rand(1:10000,10000)
-plt2,_ = generalAssociationTest(xVals,yVals, "Random","Rand X","Rand Y")
-Plots.savefig(plt2,"plotting/GAT_random.png")
+plt3,_ = generalAssociationTest(xVals,yVals, "Random","Rand X","Rand Y")
+Plots.savefig(plt3,"plotting/GAT_random.png")
 
 
 
+women = dataset("datasets","women")
+println(first(women))
+println(describe(women))
+
+xVals = women[:Height]
+yVals = women[:Weight]
+
+plt4,_ = generalAssociationTest(xVals,yVals, "Women dataset","Height","Weight")
+Plots.savefig(plt4,"plotting/GAT_women.png")

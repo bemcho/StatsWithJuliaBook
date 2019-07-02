@@ -69,7 +69,7 @@ function validateGAT(xVals::Array{T,N},yVals::Array{T,N}) where {T<: Real,N}
 
     xSmooth = smooth(xVals)
     ySmooth = smooth(yVals)
-    medianY = median(ySmooth)
+    medianY = mean(ySmooth)
     medianLine = LineSegment(Point(minimum(xSmooth),medianY),Point(maximum(xSmooth),medianY))
 
     n = length(xSmooth)

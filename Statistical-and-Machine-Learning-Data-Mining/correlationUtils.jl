@@ -106,7 +106,7 @@ function generalAssociationTest(xVals::Array{T,N},yVals::Array{T,N},title::Strin
     smoothScatterPlot!(xVals,yVals)
 
     n,TS,intersections = validateGAT(xVals,yVals)
-    annotate!([(median(xVals) ,maximum(yVals),"N is $n ,TS is $TS, Intersections - $(length(intersections)), $(TS < 7 ? :failed : :passed)")])
+    annotate!([(median(xVals) ,maximum(yVals),"N is $n ,TS is $TS, Intersections == $(length(intersections)), $(TS < 7 ? :failed : :passed)")])
   
     println("N is $n, TS is $TS, Intersections - $(length(intersections)), $(TS < 7 ? :failed : :passed))")
     return (plt,n,TS,intersections)

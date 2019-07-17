@@ -1,3 +1,4 @@
+__precompile__() 
 using GeometryTypes, Plots,StatsPlots,Statistics
 """
     smooth(vals::Array{T,N}) where {T<:Real,N}
